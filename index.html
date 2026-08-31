@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piro Beta APK v1.13.0 - Unduh Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apk-green: #24caa1;
+            --apk-dark-green: #1ba884;
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        .navbar {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .brand-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text span {
+            color: var(--apk-green);
+        }
+
+        .user-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-sub);
+        }
+
+        .user-dot {
+            width: 7px;
+            height: 7px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        .user-dot.active {
+            background: var(--apk-green);
+            box-shadow: 0 0 8px var(--apk-green);
+        }
+
+        .container {
+            max-width: 580px;
+            margin: 16px auto;
+            padding: 0 14px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .app-header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .app-icon {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .app-meta h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .app-developer {
+            font-size: 13px;
+            color: var(--apk-green);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(36, 202, 161, 0.12);
+            color: var(--apk-green);
+            border: 1px solid rgba(36, 202, 161, 0.25);
+        }
+
+        .spec-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 6px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .spec-item {
+            border-right: 1px solid var(--border-color);
+        }
+
+        .spec-item:last-child {
+            border-right: none;
+        }
+
+        .spec-val {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-buy {
+            background: var(--apk-green);
+            color: #0d1117;
+            box-shadow: 0 4px 14px rgba(36, 202, 161, 0.3);
+        }
+
+        .btn-buy:hover {
+            background: var(--apk-dark-green);
+            transform: translateY(-1px);
+        }
+
+        .btn-download-unlocked {
+            background: linear-gradient(135deg, #00e599, #00b4d8);
+            color: #0b0f19;
+            box-shadow: 0 6px 20px rgba(0, 229, 153, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .btn-download-unlocked:hover {
+            transform: translateY(-1px);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 229, 153, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(0, 229, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 229, 153, 0); }
+        }
+
+        .btn-account {
+            background: rgba(255, 255, 255, 0.06);
+            color: #f0f6fc;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-account:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .section-header {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .verified-tag {
+            font-size: 12px;
+            color: var(--apk-green);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+
+        .screenshot-box {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screenshot-box::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .screenshot-box::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .screenshot-item {
+            flex: 0 0 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            scroll-snap-align: start;
+            background: #000;
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .app-desc {
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: var(--text-sub);
+        }
+
+        .app-desc strong {
+            color: #f0f6fc;
+        }
+
+        .desc-features {
+            margin-top: 10px;
+            padding-left: 18px;
+            color: var(--text-sub);
+            font-size: 13.5px;
+            line-height: 1.6;
+        }
+
+        .desc-features li {
+            margin-bottom: 6px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .info-table tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .info-table td {
+            padding: 10px 0;
+            color: var(--text-sub);
+        }
+
+        .info-table td:last-child {
+            text-align: right;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 8, 15, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-body {
+            position: relative;
+            background: linear-gradient(145deg, #1c2331, #131822);
+            border: 1px solid rgba(36, 202, 161, 0.25);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(36, 202, 161, 0.1);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 410px;
+            padding: 24px;
+            transform: scale(0.92) translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.show .modal-body {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 77, 79, 0.2);
+            color: #ff4d4f;
+            transform: rotate(90deg);
+        }
+
+        .modal-badge-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: rgba(36, 202, 161, 0.12);
+            border: 1px solid rgba(36, 202, 161, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 14px;
+        }
+
+        .modal-body h3 {
+            font-size: 19px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .modal-body p {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 13px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 12px;
+            transition: 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--apk-green);
+            box-shadow: 0 0 10px rgba(36, 202, 161, 0.2);
+        }
+
+        .divider-text {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-sub);
+            margin: 12px 0;
+        }
+
+        .dl-modal-box {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .dl-anim-circle {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dl-svg-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .dl-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.08);
+            stroke-width: 6;
+        }
+
+        .dl-circle-progress {
+            fill: none;
+            stroke: var(--apk-green);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 251.2;
+            stroke-dashoffset: 251.2;
+            transition: stroke-dashoffset 0.1s linear;
+            filter: drop-shadow(0 0 8px rgba(36, 202, 161, 0.6));
+        }
+
+        .dl-icon-center {
+            font-size: 32px;
+            animation: bounceSoft 1.2s infinite;
+        }
+
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .dl-progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 18px 0 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dl-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00e599, #00b4d8);
+            border-radius: 20px;
+            box-shadow: 0 0 12px rgba(0, 229, 153, 0.6);
+            transition: width 0.1s linear;
+        }
+
+        .dl-status-text {
+            font-size: 13px;
+            color: var(--text-sub);
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" class="brand-logo">
+            <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Logo" class="logo-icon">
+            <div class="brand-text">PIRO<span>STORE BETA</span></div>
+        </a>
+        <div class="user-pill">
+            <span id="user-dot" class="user-dot"></span>
+            <span id="nav-user">Memeriksa...</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="app-header">
+                <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Piro Icon" class="app-icon">
+                <div class="app-meta">
+                    <h1>Piro Beta</h1>
+                    <div class="app-developer">Pirostore Official</div>
+                    <div class="badge-row">
+                        <span class="badge">BETA TESTER</span>
+                        <span class="badge">MARKETPLACE</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spec-bar">
+                <div class="spec-item"><div class="spec-val">⭐ 4.9</div><div class="spec-label">Rating</div></div>
+                <div class="spec-item"><div class="spec-val">1.13.0</div><div class="spec-label">Versi</div></div>
+                <div class="spec-item"><div class="spec-val">Android 7.0+</div><div class="spec-label">Sistem</div></div>
+                <div class="spec-item"><div class="spec-val">2.90 MB</div><div class="spec-label">Ukuran</div></div>
+            </div>
+
+            <div class="button-group">
+                <button id="btn-buy-state" class="btn btn-buy" onclick="handleBuyClick()">
+                    ⚡ Unduh APK Beta (Rp 15.000)
+                </button>
+                <button id="btn-download-state" class="btn btn-download-unlocked hidden" onclick="startLuxuryDownload()">
+                    Unduh
+                </button>
+                <button class="btn btn-account" onclick="openUsernameModal()">
+                    👤 <span id="btn-user-text">Buat Username</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">
+                <span>Galery Tampilan</span>
+                <span class="verified-tag">✓ Terverifikasi Aman</span>
+            </div>
+            <div class="screenshot-box">
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-d681e816-94bb-4abb-a091-4d523f01427f.jpg" alt="Foto 1">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-132fe64a-f42f-44d4-8f56-23a2861644ec.jpg" alt="Foto 2">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-d03fefc5-39a8-4eaa-9b6d-cba11435fdc0.jpg" alt="Foto 3">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-bffb2686-6e5a-4532-a214-a6bfe89b80ca.jpg" alt="Foto 4">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-533ba1aa-1ce9-4b24-bb33-77d145e5478e.jpg" alt="Foto 5">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header"><span>Deskripsi Piro Beta</span></div>
+            <p class="app-desc">
+                <strong>Piro Beta adalah apk marketplace uji coba.</strong> Aplikasi ini dirancang khusus bagi pengguna yang ingin menikmati akses uji coba eksklusif, menjelajahi fitur marketplace digital, hingga mencoba pembaruan katalog layanan lebih awal sebelum versi rilis publik diluncurkan secara resmi.
+            </p>
+            <ul class="desc-features">
+                <li>Akses katalog produk dan layanan premium eksklusif.</li>
+                <li>Pembaruan rilis cepat khusus bagi pengguna beta tester.</li>
+                <li>Dukungan verifikasi instan dan terhubung ke layanan VIP.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="section-header"><span>Informasi Aplikasi</span></div>
+            <table class="info-table">
+                <tr><td>Versi Aplikasi</td><td>1.13.0 (Build Beta)</td></tr>
+                <tr><td>Ukuran Berkas</td><td>2.90 MB</td></tr>
+                <tr><td>Pengembang</td><td>Pirostore Official</td></tr>
+                <tr><td>Kategori</td><td>Marketplace / Alat</td></tr>
+                <tr><td>Keamanan</td><td>Bebas Malware (Clean Signed)</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="user-modal" class="modal-overlay">
+        <div class="modal-body">
+            <button class="modal-close-btn" onclick="closeUsernameModal()" title="Tutup">✕</button>
+            <div class="modal-badge-icon">👑</div>
+            <h3 id="modal-title">Pengaturan Akun</h3>
+            <p id="modal-desc">Gunakan username unik untuk memproses pembelian dan verifikasi aplikasi.</p>
+
+            <input type="text" id="input-custom-name" class="form-input" placeholder="Ketik username kamu...">
+            <button class="btn btn-buy" onclick="saveCustomName()">💾 Simpan Username</button>
+
+            <div class="divider-text">— ATAU —</div>
+
+            <button class="btn btn-account" onclick="generateAutoName()">🎲 Buat Otomatis (userXXXX)</button>
+        </div>
+    </div>
+
+    <div id="download-modal" class="modal-overlay">
+        <div class="modal-body dl-modal-box">
+            <div class="dl-anim-circle">
+                <svg class="dl-svg-ring" viewBox="0 0 90 90">
+                    <circle class="dl-circle-bg" cx="45" cy="45" r="40"></circle>
+                    <circle id="dl-circle-val" class="dl-circle-progress" cx="45" cy="45" r="40"></circle>
+                </svg>
+                <div id="dl-icon" class="dl-icon-center">⬇️</div>
+            </div>
+
+            <h3 id="dl-title">Mengunduh Piro Beta...</h3>
+            <p id="dl-sub">Menghubungkan ke server aman Pirostore...</p>
+
+            <div class="dl-progress-bar-bg">
+                <div id="dl-bar" class="dl-progress-bar-fill"></div>
+            </div>
+
+            <div class="dl-status-text">
+                <span id="dl-percent">0%</span>
+                <span id="dl-size">0.00 / 2.90 MB</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://black-block-a3bd.mandasukaaku.workers.dev";
+        const OWNER_WA = "6283161621493";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            checkStatus();
+            setInterval(checkStatus, 3000);
+        });
+
+        window.addEventListener('focus', checkStatus);
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") checkStatus();
+        });
+
+        async function checkStatus() {
+            const user = localStorage.getItem("piro_username");
+            const navLabel = document.getElementById("nav-user");
+            const btnLabel = document.getElementById("btn-user-text");
+            const dot = document.getElementById("user-dot");
+            const btnBuy = document.getElementById("btn-buy-state");
+            const btnDownload = document.getElementById("btn-download-state");
+
+            if (user) {
+                navLabel.innerText = "@" + user;
+                btnLabel.innerText = "Ganti Username (@" + user + ")";
+                dot.classList.add("active");
+
+                try {
+                    const res = await fetch(`${API_URL}/api/status`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const resData = await res.json();
+
+                    if (resData.verified) {
+                        localStorage.setItem("piro_verified_" + user.toLowerCase(), "true");
+                        btnBuy.classList.add("hidden");
+                        btnDownload.classList.remove("hidden");
+                        return;
+                    } else {
+                        localStorage.removeItem("piro_verified_" + user.toLowerCase());
+                    }
+                } catch (e) {
+                    const localVerified = localStorage.getItem("piro_verified_" + user.toLowerCase()) === "true";
+                    if (localVerified) {
+                        btnBuy.classList.add("hidden");
+                        btnDownload.classList.remove("hidden");
+                        return;
+                    }
+                }
+            } else {
+                navLabel.innerText = "Belum Ada Akun";
+                btnLabel.innerText = "Buat Username";
+                dot.classList.remove("active");
+            }
+
+            btnBuy.classList.remove("hidden");
+            btnDownload.classList.add("hidden");
+        }
+
+        function openUsernameModal(isWarning = false) {
+            const modal = document.getElementById("user-modal");
+            const title = document.getElementById("modal-title");
+            const desc = document.getElementById("modal-desc");
+            if (isWarning) {
+                title.innerText = "Akun Belum Dibuat";
+                title.style.color = "#ffaa00";
+                desc.innerText = "Harap buat username terlebih dahulu sebelum melanjutkan pesanan.";
+            } else {
+                title.innerText = "Pengaturan Akun";
+                title.style.color = "#ffffff";
+                desc.innerText = "Gunakan username unik untuk memproses pembelian dan verifikasi aplikasi.";
+            }
+            modal.classList.add("show");
+        }
+
+        function closeUsernameModal() {
+            document.getElementById("user-modal").classList.remove("show");
+        }
+
+        function saveCustomName() {
+            const val = document.getElementById("input-custom-name").value.trim();
+            if (!val) return alert("Harap masukkan username Anda!");
+            localStorage.setItem("piro_username", val);
+            checkStatus();
+            closeUsernameModal();
+        }
+
+        function generateAutoName() {
+            const randomDigits = Math.floor(1000 + Math.random() * 9000);
+            const autoUser = "user" + randomDigits;
+            localStorage.setItem("piro_username", autoUser);
+            checkStatus();
+            closeUsernameModal();
+        }
+
+        async function handleBuyClick() {
+            const currentUser = localStorage.getItem("piro_username");
+            if (!currentUser) {
+                openUsernameModal(true);
+                return;
+            }
+
+            const randomId = "PIRO-" + Math.floor(100000 + Math.random() * 900000);
+
+            try {
+                await fetch(`${API_URL}/api/order`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: currentUser, purchaseId: randomId })
+                });
+            } catch (e) {
+                console.log("Order offline");
+            }
+
+            const text = `Halo Developer/Owner, saya ingin membeli APK Piro Beta seharga Rp 15.000.\n\n` +
+                         `• Username: @${currentUser}\n` +
+                         `• ID Pembelian: ${randomId}\n\n` +
+                         `Mohon konfirmasinya ya!`;
+
+            window.open(`https://wa.me/${OWNER_WA}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function startLuxuryDownload() {
+            const modal = document.getElementById("download-modal");
+            const bar = document.getElementById("dl-bar");
+            const circleVal = document.getElementById("dl-circle-val");
+            const percentText = document.getElementById("dl-percent");
+            const sizeText = document.getElementById("dl-size");
+            const titleText = document.getElementById("dl-title");
+            const subText = document.getElementById("dl-sub");
+            const icon = document.getElementById("dl-icon");
+
+            bar.style.width = "0%";
+            circleVal.style.strokeDashoffset = "251.2";
+            percentText.innerText = "0%";
+            sizeText.innerText = "0.00 / 2.90 MB";
+            titleText.innerText = "Mengunduh Piro Beta...";
+            subText.innerText = "Mengamankan enkripsi berkas APK...";
+            icon.innerText = "⬇️";
+            modal.classList.add("show");
+
+            let progress = 0;
+            const totalSize = 2.90;
+            const circumference = 251.2;
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 4;
+
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+
+                    bar.style.width = "100%";
+                    circleVal.style.strokeDashoffset = "0";
+                    percentText.innerText = "100%";
+                    sizeText.innerText = "2.90 / 2.90 MB";
+                    titleText.innerText = "Unduhan Selesai!";
+                    subText.innerText = "Berkas APK siap dipasang di perangkat kamu.";
+                    icon.innerText = "✅";
+
+                    setTimeout(() => {
+                        const a = document.createElement("a");
+                        a.href = "Piro BETA.apk";
+                        a.download = "Piro BETA.apk";
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+
+                        setTimeout(() => {
+                            modal.classList.remove("show");
+                        }, 1200);
+                    }, 600);
+                } else {
+                    bar.style.width = progress + "%";
+                    const offset = circumference - (progress / 100) * circumference;
+                    circleVal.style.strokeDashoffset = offset;
+                    percentText.innerText = progress + "%";
+                    const currentMB = ((progress / 100) * totalSize).toFixed(2);
+                    sizeText.innerText = `${currentMB} / 2.90 MB`;
+
+                    if (progress > 50) {
+                        subText.innerText = "Menyimpan ke memori perangkat...";
+                    }
+                }
+            }, 120);
+        }
+    </script>
+</body>
+</html>
