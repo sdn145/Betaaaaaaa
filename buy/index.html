@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Pembelian - Piro Beta</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f7f9fa;
+            color: #333;
+            padding-bottom: 40px;
+        }
+        .navbar {
+            background-color: #24caa1;
+            color: #fff;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #111;
+        }
+        .card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus {
+            border-color: #24caa1;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-confirm {
+            background-color: #24caa1;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(36,202,161,0.3);
+        }
+        .btn-confirm:hover {
+            background-color: #1eb38e;
+        }
+        .btn-download-free {
+            background-color: #00b06f;
+            color: #fff;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0,176,111,0.3);
+        }
+        .btn-download-free:hover {
+            background-color: #008f5a;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .status-locked {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        .status-unlocked {
+            background: #e8f8f5;
+            color: #118468;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">Piro Market</div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Konfirmasi Pembelian</h2>
+            <p>Masukkan ID pembelian yang kamu dapatkan saat memesan lewat WhatsApp untuk membuka unduhan APK.</p>
+
+            <!-- Box Status Unduhan -->
+            <div id="status-area">
+                <span id="badge-status" class="status-badge status-locked">Status: Belum Terverifikasi (Rp 15.000)</span>
+            </div>
+
+            <!-- Form Input ID -->
+            <div class="form-group">
+                <label for="buyer-id">Id pembeli:</label>
+                <input type="text" id="buyer-id" class="form-control" placeholder="Contoh: PIRO-123456">
+            </div>
+
+            <button id="btn-submit" class="btn btn-confirm" onclick="konfirmasiID()">Konfirmasi</button>
+
+            <!-- Tombol Unduh Gratis (Muncul Setelah Konfirmasi) -->
+            <div id="download-area" class="hidden">
+                <hr style="margin: 20px 0; border: none; border-top: 1px dashed #ddd;">
+                <a href="https://piro-web-apk.vercel.app/" class="btn btn-download-free" target="_blank">Unduh APK Piro Beta (Gratis)</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function konfirmasiID() {
+            const idInput = document.getElementById('buyer-id').value.trim();
+
+            if (!idInput) {
+                alert("Harap masukkan Id pembeli terlebih dahulu!");
+                return;
+            }
+
+            // Ubah badge status
+            const badge = document.getElementById('badge-status');
+            badge.className = "status-badge status-unlocked";
+            badge.innerText = "Status: Terverifikasi (Gratis)";
+
+            // Nonaktifkan form input & tombol konfirmasi
+            document.getElementById('buyer-id').disabled = true;
+            document.getElementById('btn-submit').style.display = 'none';
+
+            // Tampilkan tombol unduh gratis
+            document.getElementById('download-area').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
