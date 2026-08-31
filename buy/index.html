@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pirostore Admin - Verifikasi & Reset Akses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apk-green: #24caa1;
+            --apk-dark-green: #1ba884;
+            --accent-red: #ff4d4f;
+            --accent-red-hover: #d9363e;
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
+
+        .navbar {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+        .brand-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .brand-text span { color: var(--apk-green); }
+
+        .admin-badge {
+            background: rgba(36, 202, 161, 0.15);
+            border: 1px solid rgba(36, 202, 161, 0.3);
+            color: var(--apk-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .container { max-width: 540px; margin: 24px auto; padding: 0 16px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 22px; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+        .card-header { margin-bottom: 16px; }
+        .card-title { font-size: 17px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .card-subtitle { font-size: 13px; color: var(--text-sub); margin-top: 4px; line-height: 1.5; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+        .form-input {
+            width: 100%;
+            padding: 13px 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus { border-color: var(--apk-green); }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-confirm { background: var(--apk-green); color: #0d1117; box-shadow: 0 4px 14px rgba(36, 202, 161, 0.25); }
+        .btn-confirm:hover { background: var(--apk-dark-green); }
+
+        .btn-reset { background: var(--accent-red); color: #ffffff; box-shadow: 0 4px 14px rgba(255, 77, 79, 0.25); }
+        .btn-reset:hover { background: var(--accent-red-hover); }
+
+        .card-reset { border-color: rgba(255, 77, 79, 0.25); background: linear-gradient(180deg, rgba(255, 77, 79, 0.03), var(--bg-card)); }
+
+        /* MODAL POPUP */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            padding: 16px; z-index: 1000;
+            opacity: 0; pointer-events: none; transition: 0.2s;
+        }
+
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-box {
+            background: #1c2128;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            width: 100%; max-width: 420px;
+            padding: 24px;
+            text-align: center;
+            transform: translateY(20px);
+            transition: 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.show .modal-box { transform: translateY(0); }
+
+        .modal-icon {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 16px auto;
+        }
+
+        .icon-success { background: rgba(36, 202, 161, 0.15); border: 1px solid var(--apk-green); color: var(--apk-green); }
+        .icon-danger { background: rgba(255, 77, 79, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red); }
+
+        .modal-box h3 { font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+        .modal-box p { font-size: 13.5px; color: var(--text-sub); line-height: 1.6; margin-bottom: 20px; }
+        .modal-box strong { color: #fff; }
+
+        .modal-btn-close {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+        }
+        .modal-btn-close:hover { background: rgba(255, 255, 255, 0.14); }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" class="brand-logo">
+            <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Logo" class="logo-icon">
+            <div class="brand-text">PIRO<span>STORE ADMIN</span></div>
+        </a>
+        <div class="admin-badge">⚡ PANEL ADMIN</div>
+    </div>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">✅ Konfirmasi Akses Pembeli</div>
+                <div class="card-subtitle">Verifikasi pengguna setelah bukti pembayaran diterima. Tombol di Web 1 akan berubah menjadi <strong>"Unduh"</strong>.</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Username Pembeli (Dibuat di Web Utama)</label>
+                <input type="text" id="confirm-username" class="form-input" placeholder="Contoh: user1234 atau rian_store">
+            </div>
+
+            <button class="btn btn-confirm" onclick="handleConfirmUser()">
+                ✨ Buka Akses Unduh (Konfirmasi)
+            </button>
+        </div>
+
+        <div class="card card-reset">
+            <div class="card-header">
+                <div class="card-title" style="color: #ff6b6b;">🔄 Reset User</div>
+                <div class="card-subtitle">Cabut izin verifikasi pengguna. User yang di-reset akan otomatis kembali ke status belum beli (<strong>Rp 15.000</strong>).</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Username yang Ingin Direset</label>
+                <input type="text" id="reset-username" class="form-input" placeholder="Masukkan username yang mau di-reset...">
+            </div>
+
+            <button class="btn btn-reset" onclick="handleResetUser()">
+                🗑️ Reset Akses Pengguna
+            </button>
+        </div>
+
+    </div>
+
+    <div id="status-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div id="modal-icon" class="modal-icon icon-success">✓</div>
+            <h3 id="modal-title">Berhasil!</h3>
+            <p id="modal-message">Akses telah diperbarui secara langsung.</p>
+            <button class="modal-btn-close" onclick="closeModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://black-block-a3bd.mandasukaaku.workers.dev";
+
+        // Auto isi username jika ada parameter URL (?u=username)
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const userParam = params.get('u');
+            if (userParam) {
+                document.getElementById('confirm-username').value = userParam;
+                document.getElementById('reset-username').value = userParam;
+            }
+        });
+
+        function showModal(isSuccess, title, message) {
+            const modal = document.getElementById("status-modal");
+            const icon = document.getElementById("modal-icon");
+            const titleEl = document.getElementById("modal-title");
+            const msgEl = document.getElementById("modal-message");
+
+            titleEl.innerText = title;
+            msgEl.innerHTML = message;
+
+            if (isSuccess) {
+                icon.className = "modal-icon icon-success";
+                icon.innerText = "✓";
+                titleEl.style.color = "#24caa1";
+            } else {
+                icon.className = "modal-icon icon-danger";
+                icon.innerText = "✕";
+                titleEl.style.color = "#ff4d4f";
+            }
+
+            modal.classList.add("show");
+        }
+
+        function closeModal() {
+            document.getElementById("status-modal").classList.remove("show");
+        }
+
+        // FUNGSI KONFIRMASI (VERIFIKASI) USER
+        async function handleConfirmUser() {
+            const usernameInput = document.getElementById("confirm-username").value.trim().replace(/^@/, '');
+            if (!usernameInput) {
+                return showModal(false, "Peringatan", "Harap masukkan username yang ingin diverifikasi!");
+            }
+
+            try {
+                // Simpan ke Cloudflare Worker
+                await fetch(`${API_URL}/api/verify`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: usernameInput })
+                });
+
+                // Sinkronisasi lokal jika berada di domain yang sama
+                localStorage.setItem("piro_verified_" + usernameInput.toLowerCase(), "true");
+
+                showModal(
+                    true, 
+                    "Akses Berhasil Dibuka!", 
+                    `Akun <strong>@${usernameInput}</strong> telah aktif. Di Web 1 tombol langsung berubah menjadi <strong>"Unduh"</strong>.`
+                );
+                document.getElementById("confirm-username").value = "";
+            } catch (err) {
+                // Fallback localstorage
+                localStorage.setItem("piro_verified_" + usernameInput.toLowerCase(), "true");
+                showModal(
+                    true, 
+                    "Berhasil (Mode Sinkron Lokal)", 
+                    `Akun <strong>@${usernameInput}</strong> telah diverifikasi.`
+                );
+            }
+        }
+
+        // FUNGSI BARU: RESET USER
+        async function handleResetUser() {
+            const usernameInput = document.getElementById("reset-username").value.trim().replace(/^@/, '');
+            if (!usernameInput) {
+                return showModal(false, "Peringatan", "Harap masukkan username yang ingin di-reset!");
+            }
+
+            try {
+                // Kirim request reset ke Worker
+                await fetch(`${API_URL}/api/reset`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: usernameInput })
+                });
+
+                // Hapus data verifikasi dari local
+                localStorage.removeItem("piro_verified_" + usernameInput.toLowerCase());
+
+                showModal(
+                    true, 
+                    "User Berhasil Direset!", 
+                    `Akses untuk <strong>@${usernameInput}</strong> telah dicabut. Pengguna tersebut sekarang harus melakukan pembelian ulang (<strong>Rp 15.000</strong>) untuk bisa mengunduh.`
+                );
+                document.getElementById("reset-username").value = "";
+            } catch (err) {
+                localStorage.removeItem("piro_verified_" + usernameInput.toLowerCase());
+                showModal(
+                    true, 
+                    "Reset Selesai (Lokal)", 
+                    `Status akun <strong>@${usernameInput}</strong> telah di-reset ke belum beli.`
+                );
+            }
+        }
+    </script>
+</body>
+</html>
