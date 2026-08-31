@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Pembelian - Piro Beta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apk-green: #24caa1;
+            --apk-dark-green: #1ba884;
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+            --danger: #ff4d4f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 50px; }
+
+        .navbar {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+        .brand-text { font-size: 19px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .brand-text span { color: var(--apk-green); }
+
+        .user-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--apk-green);
+        }
+
+        .user-dot { width: 7px; height: 7px; background: var(--apk-green); border-radius: 50%; box-shadow: 0 0 8px var(--apk-green); }
+
+        .container { max-width: 480px; margin: 30px auto; padding: 0 16px; }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 26px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .key-icon-box {
+            width: 65px; height: 65px; margin: 0 auto 16px;
+            background: rgba(36, 202, 161, 0.1);
+            border: 1px solid var(--apk-green);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center; font-size: 28px;
+            box-shadow: 0 0 20px rgba(36, 202, 161, 0.25);
+        }
+
+        .card h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; color: #fff; }
+        .card p { font-size: 13.5px; color: var(--text-sub); line-height: 1.5; margin-bottom: 20px; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 7px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 700; margin-bottom: 20px;
+        }
+        .status-locked { background: rgba(255, 170, 0, 0.12); color: #ffaa00; border: 1px solid rgba(255, 170, 0, 0.3); }
+        .status-unlocked { background: rgba(36, 202, 161, 0.15); color: var(--apk-green); border: 1px solid var(--apk-green); }
+
+        .form-group { text-align: left; margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+        
+        .form-input {
+            width: 100%; padding: 13px 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 10px; color: #fff; font-size: 14.5px; outline: none;
+            transition: 0.2s;
+        }
+        .form-input:focus { border-color: var(--apk-green); }
+
+        .btn {
+            width: 100%; padding: 14px; border-radius: 10px; border: none;
+            font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;
+        }
+        .btn-confirm { background: var(--apk-green); color: #0d1117; }
+        .btn-confirm:hover { background: var(--apk-dark-green); }
+
+        .error-msg {
+            color: var(--danger); font-size: 12.5px; font-weight: 600; margin-top: 8px; text-align: left; display: none;
+        }
+
+        .success-box {
+            margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--border-color);
+        }
+        .btn-free {
+            background: linear-gradient(135deg, #00e599, #00b4d8);
+            color: #0b0f19; margin-top: 12px;
+            box-shadow: 0 4px 15px rgba(0, 229, 153, 0.35);
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="../" class="brand-logo">
+            <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Logo" class="logo-icon">
+            <div class="brand-text">PIRO<span>STORE</span></div>
+        </a>
+        <div class="user-pill">
+            <span class="user-dot"></span>
+            <span id="nav-user-text">@Guest</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="key-icon-box">🔑</div>
+            <h2>Konfirmasi Pembelian</h2>
+            <p>Masukkan ID Pembelian resmi yang kamu dapatkan saat memesan lewat WhatsApp.</p>
+
+            <span id="status-badge" class="status-badge status-locked">🔒 Status: Terkunci (Rp 15.000)</span>
+
+            <div class="form-group">
+                <label for="buyer-id">Id pembeli:</label>
+                <input type="text" id="buyer-id" class="form-input" placeholder="Contoh: PIRO-849201">
+                <div id="error-text" class="error-msg">⚠️ ID Pembelian tidak terdaftar / salah!</div>
+            </div>
+
+            <button id="btn-submit" class="btn btn-confirm" onclick="verifikasiIDCloud()">Konfirmasi</button>
+
+            <!-- Box Hasil Konfirmasi Sukses -->
+            <div id="success-area" class="success-box hidden">
+                <p style="color: var(--apk-green); font-size: 13px; font-weight: 600; margin-bottom: 0;">
+                    ✅ ID Valid! Web Utama sekarang telah berubah menjadi Unduh Gratis:
+                </p>
+                <a href="../Piro BETA.apk" class="btn btn-free" download>
+                    ⬇️ Unduh APK Piro Beta (Gratis)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://black-block-a3bd.mandasukaaku.workers.dev";
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const user = localStorage.getItem("piro_username");
+            const navUser = document.getElementById("nav-user-text");
+
+            if (user) {
+                navUser.innerText = "@" + user;
+
+                // Cek status lokal terlebih dahulu
+                if (localStorage.getItem("piro_verified_" + user.toLowerCase()) === "true") {
+                    tampilkanBerhasil();
+                    return;
+                }
+
+                // Cek status ke cloud server
+                try {
+                    const res = await fetch(`${API_URL}/api/status`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const data = await res.json();
+                    if (data.verified) {
+                        localStorage.setItem("piro_verified_" + user.toLowerCase(), "true");
+                        tampilkanBerhasil();
+                    }
+                } catch(e) {}
+            } else {
+                navUser.innerText = "Belum Ada Akun";
+            }
+        });
+
+        async function verifikasiIDCloud() {
+            const user = localStorage.getItem("piro_username");
+            const inputID = document.getElementById("buyer-id").value.trim();
+            const errorText = document.getElementById("error-text");
+            const btnSubmit = document.getElementById("btn-submit");
+
+            if (!user) {
+                alert("Harap buat username di Web Utama terlebih dahulu!");
+                return;
+            }
+
+            if (!inputID) {
+                errorText.innerText = "⚠️ Harap masukkan Id pembeli!";
+                errorText.style.display = "block";
+                return;
+            }
+
+            btnSubmit.innerText = "Memverifikasi...";
+            btnSubmit.disabled = true;
+
+            let isSuccess = false;
+
+            // 1. Cek via Cloud API Worker
+            try {
+                const res = await fetch(`${API_URL}/api/verify`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: user, purchaseId: inputID })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    isSuccess = true;
+                }
+            } catch (e) {
+                console.log("Cek via local fallback");
+            }
+
+            // 2. Fallback Validasi Sinkronisasi Lokal (Memastikan ID persis sama dengan yang dibuat di Web 1)
+            const localSavedID = localStorage.getItem("piro_order_" + user.toLowerCase());
+            if (!isSuccess && localSavedID && localSavedID === inputID) {
+                isSuccess = true;
+            }
+
+            // Eksekusi Hasil Validasi
+            if (isSuccess) {
+                errorText.style.display = "none";
+                localStorage.setItem("piro_verified_" + user.toLowerCase(), "true");
+                tampilkanBerhasil();
+            } else {
+                errorText.innerText = `⚠️ ID Pembelian salah atau tidak cocok dengan akun @${user}!`;
+                errorText.style.display = "block";
+                btnSubmit.innerText = "Konfirmasi";
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function tampilkanBerhasil() {
+            const badge = document.getElementById("status-badge");
+            const inputField = document.getElementById("buyer-id");
+            const btnSubmit = document.getElementById("btn-submit");
+            const successArea = document.getElementById("success-area");
+
+            badge.className = "status-badge status-unlocked";
+            badge.innerHTML = "🔓 Status: Terverifikasi (Gratis)";
+
+            inputField.disabled = true;
+            btnSubmit.style.display = "none";
+            successArea.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
