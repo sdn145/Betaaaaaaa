@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klaim VIP Gratis - Piro Store</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding-bottom: 40px;
+        }
+        /* Header Tema VIP Emas / Gelap */
+        .header {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .header h1 {
+            font-size: 19px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        /* Tab Navigasi 2 Halaman */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 10px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #94a3b8;
+            max-width: 250px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+        .nav-tab.active {
+            color: #f59e0b;
+            border-bottom: 3px solid #f59e0b;
+        }
+        .container {
+            max-width: 520px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            border: 1px solid #334155;
+        }
+        .card h2 {
+            font-size: 18px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+        .desc-box {
+            background: #0f172a;
+            border-left: 4px solid #f59e0b;
+            padding: 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-gold {
+            background: #f59e0b;
+            color: #0f172a;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+        .btn-gold:hover {
+            background: #d97706;
+        }
+        /* Formulir */
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #e2e8f0;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: #f59e0b;
+        }
+        .note-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: #fcd34d;
+            margin-top: 18px;
+            border-radius: 0 8px 8px 0;
+            line-height: 1.5;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Siapapun yg beli apk Beta dapet VIP gratis</h1>
+    </div>
+
+    <!-- Navigasi 2 Halaman -->
+    <div class="nav-tabs">
+        <div id="tab-btn-1" class="nav-tab active" onclick="bukaHalaman(1)">Download Piro</div>
+        <div id="tab-btn-2" class="nav-tab" onclick="bukaHalaman(2)">Isi Data VIP</div>
+    </div>
+
+    <div class="container">
+        <!-- HALAMAN 1: Link Web Download Piro Store Resmi -->
+        <div id="halaman-1" class="card">
+            <h2>Download APK Piro Store</h2>
+            <div class="desc-box">
+                Ini link download apk Piro:<br>
+                <strong>Download apk Piro jika belum download apk piro</strong>
+            </div>
+            <a href="https://piro-web-apk.vercel.app/" class="btn btn-gold" target="_blank">Kunjungi Link Download APK Piro</a>
+        </div>
+
+        <!-- HALAMAN 2: Form Isi Data Akun Piro -->
+        <div id="halaman-2" class="card hidden">
+            <h2>Konfirmasi Data VIP</h2>
+            <div class="desc-box">
+                Isi data ini setelah kamu download + login di apk Piro
+            </div>
+
+            <div class="form-group">
+                <label for="display-name">Display name:</label>
+                <input type="text" id="display-name" class="form-control" placeholder="Masukkan display name Anda">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" class="form-control" placeholder="Masukkan username Anda">
+            </div>
+
+            <button class="btn btn-gold" onclick="kirimKonfirmasi()">Konfirmasi</button>
+
+            <div class="note-box">
+                <strong>Catatan:</strong> username + display name harus persis sama seperti di apk Piro
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WA_ADMIN = "6283848223299";
+
+        function bukaHalaman(nomor) {
+            const tab1Btn = document.getElementById('tab-btn-1');
+            const tab2Btn = document.getElementById('tab-btn-2');
+            const hal1 = document.getElementById('halaman-1');
+            const hal2 = document.getElementById('halaman-2');
+
+            if (nomor === 1) {
+                tab1Btn.classList.add('active');
+                tab2Btn.classList.remove('active');
+                hal1.classList.remove('hidden');
+                hal2.classList.add('hidden');
+            } else {
+                tab2Btn.classList.add('active');
+                tab1Btn.classList.remove('active');
+                hal2.classList.remove('hidden');
+                hal1.classList.add('hidden');
+            }
+        }
+
+        function kirimKonfirmasi() {
+            const displayName = document.getElementById('display-name').value.trim();
+            const username = document.getElementById('username').value.trim();
+
+            if (!displayName || !username) {
+                alert("Harap isi Display name dan Username terlebih dahulu!");
+                return;
+            }
+
+            const pesan = `Halo, saya sudah beli APK Beta dan ingin konfirmasi klaim VIP Gratis.\n\n` +
+                          `Berikut data akun saya:\n` +
+                          `- Display name: ${displayName}\n` +
+                          `- Username: ${username}\n\n` +
+                          `Catatan: username + display name sudah persis sama seperti di apk Piro.`;
+
+            const linkWA = `https://wa.me/${WA_ADMIN}?text=${encodeURIComponent(pesan)}`;
+
+            window.open(linkWA, '_blank');
+        }
+    </script>
+</body>
+</html>
