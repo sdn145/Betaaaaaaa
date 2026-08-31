@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piro Developer Portal - Verifikasi ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apk-green: #24caa1;
+            --apk-dark-green: #1ba884;
+            --accent-red: #ff4d4f;
+            --accent-red-hover: #d9363e;
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
+
+        .navbar {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+        .brand-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .brand-text span { color: var(--apk-green); }
+
+        .admin-badge {
+            background: rgba(36, 202, 161, 0.15);
+            border: 1px solid rgba(36, 202, 161, 0.3);
+            color: var(--apk-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .container { max-width: 540px; margin: 24px auto; padding: 0 16px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 22px; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+        .card-header { margin-bottom: 16px; }
+        .card-title { font-size: 17px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .card-subtitle { font-size: 13px; color: var(--text-sub); margin-top: 4px; line-height: 1.5; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+        .form-input {
+            width: 100%;
+            padding: 13px 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .form-input:focus { border-color: var(--apk-green); box-shadow: 0 0 10px rgba(36, 202, 161, 0.2); }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-confirm { background: var(--apk-green); color: #0d1117; box-shadow: 0 4px 14px rgba(36, 202, 161, 0.25); }
+        .btn-confirm:hover { background: var(--apk-dark-green); }
+
+        /* LIST PENGGUNA */
+        .user-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .user-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-avatar {
+            width: 34px; height: 34px;
+            background: rgba(36, 202, 161, 0.15);
+            border: 1px solid var(--apk-green);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--apk-green); font-weight: 700; font-size: 13px;
+        }
+        .user-name { font-size: 14px; font-weight: 700; color: #fff; }
+        .user-badge { font-size: 11px; color: var(--apk-green); }
+
+        .btn-delete {
+            background: rgba(255, 77, 79, 0.15);
+            border: 1px solid rgba(255, 77, 79, 0.3);
+            color: var(--accent-red);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-delete:hover { background: var(--accent-red); color: #fff; }
+
+        .empty-state { text-align: center; color: var(--text-sub); font-size: 13px; padding: 18px 0; }
+
+        /* MODAL POPUP MEWAH */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 8, 15, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: center;
+            padding: 16px; z-index: 1000;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-body {
+            position: relative;
+            background: linear-gradient(145deg, #1c2331, #131822);
+            border: 1px solid rgba(36, 202, 161, 0.25);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(36, 202, 161, 0.1);
+            border-radius: 20px;
+            width: 100%; max-width: 400px;
+            padding: 26px 20px;
+            text-align: center;
+            transform: scale(0.92) translateY(10px);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.show .modal-body { transform: scale(1) translateY(0); }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 14px; right: 14px;
+            width: 32px; height: 32px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            color: var(--text-sub);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 700; cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal-close-btn:hover { background: rgba(255, 77, 79, 0.2); color: #ff4d4f; transform: rotate(90deg); }
+
+        .modal-icon-badge {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; margin: 0 auto 16px auto;
+        }
+        .icon-success { background: rgba(36, 202, 161, 0.15); border: 2px solid var(--apk-green); color: var(--apk-green); box-shadow: 0 0 16px rgba(36, 202, 161, 0.3); }
+        .icon-danger { background: rgba(255, 77, 79, 0.15); border: 2px solid var(--accent-red); color: var(--accent-red); box-shadow: 0 0 16px rgba(255, 77, 79, 0.3); }
+
+        .modal-body h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+        .modal-body p { font-size: 13.5px; color: var(--text-sub); line-height: 1.6; margin-bottom: 20px; }
+        .modal-body strong { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" class="brand-logo">
+            <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Logo" class="logo-icon">
+            <div class="brand-text">PIRO<span>STORE ADMIN</span></div>
+        </a>
+        <div class="admin-badge">⚡ DEVELOPER ONLY</div>
+    </div>
+
+    <div class="container">
+        
+        <!-- CARD KONFIRMASI ID PEMBELIAN -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">🔑 Konfirmasi ID Pembelian</div>
+                <div class="card-subtitle">Masukkan ID resmi pembeli. Jika ID tidak terdaftar di database, sistem akan menolak.</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">ID Pembelian</label>
+                <input type="text" id="input-purchase-id" class="form-input" placeholder="Contoh: PIRO-849201" autocomplete="off">
+            </div>
+
+            <button id="btn-submit" class="btn btn-confirm" onclick="konfirmasiLewatID()">
+                ✨ Konfirmasi & Buka Akses
+            </button>
+        </div>
+
+        <!-- CARD DAFTAR PENGGUNA AKTIF & RESET -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">👥 Pengguna Terverifikasi</div>
+                <div class="card-subtitle">Daftar pengguna yang aktif memiliki akses unduh. Klik <strong>Reset / Hapus</strong> untuk mencabut izinnya.</div>
+            </div>
+
+            <ul id="verified-list" class="user-list">
+                <!-- Data List Muncul Otomatis -->
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- MODAL POPUP NOTIFIKASI -->
+    <div id="status-modal" class="modal-overlay">
+        <div class="modal-body">
+            <button class="modal-close-btn" onclick="closeModal()" title="Tutup">✕</button>
+            <div id="modal-icon" class="modal-icon-badge icon-success">✓</div>
+            <h3 id="modal-title">Berhasil</h3>
+            <p id="modal-message">Akses telah diperbarui secara langsung.</p>
+            <button class="btn btn-confirm" onclick="closeModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://black-block-a3bd.mandasukaaku.workers.dev";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderUserList();
+        });
+
+        function showModal(isSuccess, title, message) {
+            const modal = document.getElementById("status-modal");
+            const icon = document.getElementById("modal-icon");
+            const titleEl = document.getElementById("modal-title");
+            const msgEl = document.getElementById("modal-message");
+
+            titleEl.innerText = title;
+            msgEl.innerHTML = message;
+
+            if (isSuccess) {
+                icon.className = "modal-icon-badge icon-success";
+                icon.innerText = "✓";
+                titleEl.style.color = "#24caa1";
+            } else {
+                icon.className = "modal-icon-badge icon-danger";
+                icon.innerText = "✕";
+                titleEl.style.color = "#ff4d4f";
+            }
+
+            modal.classList.add("show");
+        }
+
+        function closeModal() {
+            document.getElementById("status-modal").classList.remove("show");
+        }
+
+        // KONFIRMASI STRICT (HANYA DARI CLOUDFLARE)
+        async function konfirmasiLewatID() {
+            const inputField = document.getElementById("input-purchase-id");
+            const purchaseId = inputField.value.trim().toUpperCase();
+            const btnSubmit = document.getElementById("btn-submit");
+
+            if (!purchaseId) {
+                return showModal(false, "Peringatan", "Harap masukkan ID Pembelian!");
+            }
+
+            btnSubmit.innerText = "Memeriksa Cloud Server...";
+            btnSubmit.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}/api/admin-verify`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ purchaseId: purchaseId })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    return showModal(false, "ID Tidak Valid!", `ID <strong>${purchaseId}</strong> TIDAK DITEMUKAN di database server! Pastikan pembeli sudah menekan tombol beli di Web 1.`);
+                }
+
+                // Ambil nama pembeli asli yang terdaftar di ID tersebut
+                const verifiedUser = data.username;
+                tambahKeDaftarAktif(verifiedUser);
+                inputField.value = "";
+                renderUserList();
+
+                showModal(
+                    true,
+                    "Konfirmasi Berhasil!",
+                    `ID <strong>${purchaseId}</strong> terdaftar untuk pembeli <strong>@${verifiedUser}</strong>. Tombol di Web 1 miliknya otomatis berubah menjadi <strong>"Unduh"</strong>.`
+                );
+            } catch (err) {
+                showModal(false, "Koneksi Error", "Gagal menghubungi database Cloudflare. Pastikan Worker API aktif.");
+            } finally {
+                btnSubmit.innerText = "✨ Konfirmasi & Buka Akses";
+                btnSubmit.disabled = false;
+            }
+        }
+
+        // RESET USER (CABUT IZIN DARI CLOUDFLARE)
+        async function resetUser(username) {
+            try {
+                await fetch(`${API_URL}/api/admin-reset`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: username })
+                });
+            } catch (err) {
+                console.log("Reset error");
+            }
+
+            let list = getVerifiedList();
+            list = list.filter(u => u.toLowerCase() !== username.toLowerCase());
+            localStorage.setItem("piro_verified_list", JSON.stringify(list));
+
+            renderUserList();
+
+            showModal(
+                true,
+                "User Direset!",
+                `Akses akun <strong>@${username}</strong> telah dicabut di cloud server. Web 1 miliknya otomatis kembali menjadi bayar <strong>Rp 15.000</strong>.`
+            );
+        }
+
+        function getVerifiedList() {
+            try {
+                return JSON.parse(localStorage.getItem("piro_verified_list")) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function tambahKeDaftarAktif(username) {
+            let list = getVerifiedList();
+            if (!list.some(u => u.toLowerCase() === username.toLowerCase())) {
+                list.push(username);
+                localStorage.setItem("piro_verified_list", JSON.stringify(list));
+            }
+        }
+
+        function renderUserList() {
+            const container = document.getElementById("verified-list");
+            const list = getVerifiedList();
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="empty-state">Belum ada akun yang terverifikasi.</div>`;
+                return;
+            }
+
+            container.innerHTML = list.map(user => `
+                <li class="user-item">
+                    <div class="user-info">
+                        <div class="user-avatar">${user.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <div class="user-name">@${user}</div>
+                            <div class="user-badge">✓ Akses Aktif</div>
+                        </div>
+                    </div>
+                    <button class="btn-delete" onclick="resetUser('${user}')">🗑️ Reset / Hapus</button>
+                </li>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
