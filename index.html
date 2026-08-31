@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piro Beta APK v1.13.0 - Unduh Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apk-green: #24caa1;
+            --apk-dark-green: #1ba884;
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
+
+        .navbar {
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+        .brand-text { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .brand-text span { color: var(--apk-green); }
+
+        .user-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-sub);
+        }
+
+        .user-dot { width: 7px; height: 7px; background: #ef4444; border-radius: 50%; }
+        .user-dot.active { background: var(--apk-green); box-shadow: 0 0 8px var(--apk-green); }
+
+        .container { max-width: 580px; margin: 16px auto; padding: 0 14px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+
+        .app-header { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+        .app-icon { width: 76px; height: 76px; border-radius: 18px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.3); flex-shrink: 0; }
+        .app-meta h1 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .app-developer { font-size: 13px; color: var(--apk-green); font-weight: 600; margin-bottom: 6px; }
+
+        .badge-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: rgba(36, 202, 161, 0.12); color: var(--apk-green); border: 1px solid rgba(36, 202, 161, 0.25); }
+
+        .spec-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .spec-item { border-right: 1px solid var(--border-color); }
+        .spec-item:last-child { border-right: none; }
+        .spec-val { font-size: 13px; font-weight: 700; color: #fff; }
+        .spec-label { font-size: 11px; color: var(--text-sub); margin-top: 2px; }
+
+        .button-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-buy { background: var(--apk-green); color: #0d1117; box-shadow: 0 4px 14px rgba(36, 202, 161, 0.3); }
+        .btn-buy:hover { background: var(--apk-dark-green); }
+
+        .btn-download-unlocked {
+            background: linear-gradient(135deg, #00e599, #00b4d8);
+            color: #0b0f19;
+            box-shadow: 0 6px 20px rgba(0, 229, 153, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 229, 153, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(0, 229, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 229, 153, 0); }
+        }
+
+        .btn-account { background: rgba(255, 255, 255, 0.06); color: #f0f6fc; border: 1px solid var(--border-color); }
+        .btn-account:hover { background: rgba(255, 255, 255, 0.1); }
+
+        .section-header { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .verified-tag { font-size: 12px; color: var(--apk-green); display: flex; align-items: center; gap: 4px; font-weight: 600; }
+
+        /* Gallery Box Horizontal Scroll */
+        .screenshot-box {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .screenshot-box::-webkit-scrollbar {
+            height: 6px;
+        }
+        .screenshot-box::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        .screenshot-item {
+            flex: 0 0 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            scroll-snap-align: start;
+            background: #000;
+        }
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .app-desc { font-size: 13.5px; line-height: 1.7; color: var(--text-sub); }
+        .app-desc strong { color: #f0f6fc; }
+        .desc-features { margin-top: 10px; padding-left: 18px; color: var(--text-sub); }
+        .desc-features li { margin-bottom: 6px; }
+
+        /* Modal Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            padding: 16px; z-index: 1000;
+            opacity: 0; pointer-events: none; transition: 0.2s;
+        }
+
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-body { background: #1c2128; border: 1px solid var(--border-color); border-radius: 16px; width: 100%; max-width: 400px; padding: 22px; }
+        .modal-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+        .modal-body p { font-size: 13px; color: var(--text-sub); margin-bottom: 16px; }
+
+        .form-input {
+            width: 100%; padding: 12px 14px; background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 14px; outline: none; margin-bottom: 10px;
+        }
+        .form-input:focus { border-color: var(--apk-green); }
+        .divider-text { text-align: center; font-size: 11px; color: var(--text-sub); margin: 10px 0; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" class="brand-logo">
+            <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Logo" class="logo-icon">
+            <div class="brand-text">PIRO<span>STORE BETA</span></div>
+        </a>
+        <div class="user-pill">
+            <span id="user-dot" class="user-dot"></span>
+            <span id="nav-user">Memeriksa...</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="app-header">
+                <img src="https://cdn.phototourl.com/member/2026-08-31-0293601f-9572-427a-b403-c9cc74e96621.jpg" alt="Piro Icon" class="app-icon">
+                <div class="app-meta">
+                    <h1>Piro Beta</h1>
+                    <div class="app-developer">Pirostore Official</div>
+                    <div class="badge-row">
+                        <span class="badge">BETA TESTER</span>
+                        <span class="badge">MARKETPLACE</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spec-bar">
+                <div class="spec-item"><div class="spec-val">⭐ 4.9</div><div class="spec-label">Rating</div></div>
+                <div class="spec-item"><div class="spec-val">1.13.0</div><div class="spec-label">Versi</div></div>
+                <div class="spec-item"><div class="spec-val">Android 7.0+</div><div class="spec-label">Persyaratan</div></div>
+            </div>
+
+            <div class="button-group">
+                <button id="btn-buy-state" class="btn btn-buy" onclick="handleBuyClick()">
+                    ⚡ Unduh APK Beta (Rp 15.000)
+                </button>
+                <a id="btn-download-state" href="Piro BETA.apk" class="btn btn-download-unlocked hidden" download>
+                    Unduh
+                </a>
+                <button class="btn btn-account" onclick="openUsernameModal()">
+                    👤 <span id="btn-user-text">Buat Username</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">
+                <span>Galery</span>
+                <span class="verified-tag">✓ Terverifikasi Aman</span>
+            </div>
+            <div class="screenshot-box">
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-d681e816-94bb-4abb-a091-4d523f01427f.jpg" alt="Foto 1">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-132fe64a-f42f-44d4-8f56-23a2861644ec.jpg" alt="Foto 2">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-d03fefc5-39a8-4eaa-9b6d-cba11435fdc0.jpg" alt="Foto 3">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-bffb2686-6e5a-4532-a214-a6bfe89b80ca.jpg" alt="Foto 4">
+                </div>
+                <div class="screenshot-item">
+                    <img src="https://cdn.phototourl.com/member/2026-08-31-533ba1aa-1ce9-4b24-bb33-77d145e5478e.jpg" alt="Foto 5">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header"><span>Deskripsi Piro Beta</span></div>
+            <p class="app-desc">
+                <strong>piro bera adalah apk marketplace uji coba.</strong> Aplikasi ini dirancang khusus bagi pengguna yang ingin menikmati akses uji coba eksklusif, menjelajahi fitur marketplace digital, hingga mencoba pembaruan katalog layanan lebih awal sebelum versi rilis publik diluncurkan secara resmi.
+            </p>
+            <ul class="desc-features">
+                <li>Akses katalog produk dan layanan premium eksklusif.</li>
+                <li>Pembaruan rilis cepat khusus bagi pengguna beta tester.</li>
+                <li>Dukungan verifikasi instan dan terhubung ke layanan VIP.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="user-modal" class="modal-overlay">
+        <div class="modal-body">
+            <h3 id="modal-title">Buat Username</h3>
+            <p id="modal-desc">Kamu belum punya username. Buat akun dahulu sebelum melakukan transaksi:</p>
+
+            <input type="text" id="input-custom-name" class="form-input" placeholder="Ketik custom username...">
+            <button class="btn btn-buy" onclick="saveCustomName()">Gunakan Custom Name</button>
+
+            <div class="divider-text">ATAU</div>
+
+            <button class="btn btn-account" onclick="generateAutoName()">🎲 Auto Username (userXXXX)</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://black-block-a3bd.mandasukaaku.workers.dev";
+        const OWNER_WA = "6283161621493";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            checkStatus();
+        });
+
+        window.addEventListener('focus', () => {
+            checkStatus();
+        });
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+                checkStatus();
+            }
+        });
+
+        async function checkStatus() {
+            const user = localStorage.getItem("piro_username");
+            const navLabel = document.getElementById("nav-user");
+            const btnLabel = document.getElementById("btn-user-text");
+            const dot = document.getElementById("user-dot");
+            const btnBuy = document.getElementById("btn-buy-state");
+            const btnDownload = document.getElementById("btn-download-state");
+
+            if (user) {
+                navLabel.innerText = "@" + user;
+                btnLabel.innerText = "Ganti Username (@" + user + ")";
+                dot.classList.add("active");
+
+                const localVerified = localStorage.getItem("piro_verified_" + user.toLowerCase()) === "true";
+                if (localVerified) {
+                    btnBuy.classList.add("hidden");
+                    btnDownload.classList.remove("hidden");
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`${API_URL}/api/status`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: user })
+                    });
+                    const resData = await res.json();
+
+                    if (resData.verified) {
+                        localStorage.setItem("piro_verified_" + user.toLowerCase(), "true");
+                        btnBuy.classList.add("hidden");
+                        btnDownload.classList.remove("hidden");
+                        return;
+                    }
+                } catch (e) {
+                    console.log("Offline mode sync", e);
+                }
+            } else {
+                navLabel.innerText = "Belum Ada Akun";
+                btnLabel.innerText = "Buat Username";
+                dot.classList.remove("active");
+            }
+
+            btnBuy.classList.remove("hidden");
+            btnDownload.classList.add("hidden");
+        }
+
+        function openUsernameModal(isWarning = false) {
+            const modal = document.getElementById("user-modal");
+            const title = document.getElementById("modal-title");
+            if (isWarning) {
+                title.innerText = "Kamu belum punya username";
+                title.style.color = "#ffaa00";
+            } else {
+                title.innerText = "Pengaturan Username";
+                title.style.color = "#ffffff";
+            }
+            modal.classList.add("show");
+        }
+
+        function closeUsernameModal() {
+            document.getElementById("user-modal").classList.remove("show");
+        }
+
+        function saveCustomName() {
+            const val = document.getElementById("input-custom-name").value.trim();
+            if (!val) return alert("Harap masukkan username Anda!");
+            localStorage.setItem("piro_username", val);
+            checkStatus();
+            closeUsernameModal();
+            alert("Username berhasil disimpan: @" + val);
+        }
+
+        function generateAutoName() {
+            const randomDigits = Math.floor(1000 + Math.random() * 9000);
+            const autoUser = "user" + randomDigits;
+
+            localStorage.setItem("piro_username", autoUser);
+            checkStatus();
+            closeUsernameModal();
+            alert("Auto Username berhasil: @" + autoUser);
+        }
+
+        async function handleBuyClick() {
+            const currentUser = localStorage.getItem("piro_username");
+            if (!currentUser) {
+                openUsernameModal(true);
+                return;
+            }
+
+            const randomId = "PIRO-" + Math.floor(100000 + Math.random() * 900000);
+
+            localStorage.setItem("piro_order_" + currentUser.toLowerCase(), randomId);
+
+            try {
+                await fetch(`${API_URL}/api/order`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: currentUser, purchaseId: randomId })
+                });
+            } catch (e) {
+                console.log("Disimpan lokal");
+            }
+
+            const text = `Halo Developer/Owner, saya ingin membeli APK Piro Beta seharga Rp 15.000.\n\n` +
+                         `• Username: @${currentUser}\n` +
+                         `• ID Pembelian: ${randomId}\n\n` +
+                         `Mohon petunjuk pembayarannya, terima kasih!`;
+
+            window.open(`https://wa.me/${OWNER_WA}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
